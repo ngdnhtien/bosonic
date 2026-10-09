@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{ bbold }
+\usepackage[margin=0.8in, a4paper]{geometry}
+\usepackage{amsmath} 
+\usepackage{amssymb}
+\usepackage{hyperref}
+\title{How do you measure the phase of an electromagnetic field?}
+\author{Tien Nguyen Dinh}
+\date{May 2024}
+\graphicspath{{images/}}
+\DeclareMathOperator{\lgcZ}{\bar{Z}}
+\DeclareMathOperator{\lgcX}{\bar{X}}
+\DeclareMathOperator{\lgczero}{|\bar{0}\rangle}
+\DeclareMathOperator{\lgcone}{|\bar{1}\rangle}
+\DeclareMathOperator{\lgcplus}{|\bar{+}\rangle}
+\DeclareMathOperator{\lgcminus}{|\bar{-}\rangle}
+\DeclareMathOperator{\lgcpm}{|\bar{\pm}\rangle}
+\DeclareMathOperator{\tr}{\text{tr}}
+\DeclareMathOperator{\diag}{\text{diag}}
+\DeclareMathOperator{\CR}{\text{CR}}
+\DeclareMathOperator{\psianc}{|\Psi_{\text{anc}}\rangle}
+\DeclareMathOperator{\psidata}{|\Psi_{\text{data}}\rangle}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Since the dawn of civilization, humans have always curious about implementing an ideal phase measurement. How to implement a single-shot canonical phase measurement on a one-photon wave package? Here's the idea, by applying quantum feedback to a Josephson parametric amplifier, we can implement the so-called adaptive phase measurement (i.e. changing the measurement basis during photon arrival) and thus realize an ideal canonical phase measurement. 
+
+The paper on which this note based on is Martin, L.S., Livingston, W.P., Hacohen-Gourgy, S. \textit{et al.} Implementation of a canonical phase measurement with quantum feedback. Nat. Phys. \textbf{16}, 1046–1049 (2020). \href{https://doi.org/10.1038/s41567-020-0939-0}{https://doi.org/10.1038/s41567-020-0939-0}.
+
+\section{Why the problem?}
+We must note that there is no quantum mechanical operator corresponds to phase. However, one can nevertheless define an ideal measurement \textit{basis} $|\theta\rangle = \sum_{n=0}^{\infty} e^{i n \theta}|n\rangle$ that yields a canonical phase measurement. Why? Because the state $\theta$ contains a uniform superposition of all photon-number states, a measurement outcome in this basis yields no information about photon number (i.e. the strength of the field). In the absence of an instrument capable of implementing a CAN, \textit{heterodyne detection} serves as an alternative. It is implemented by rapidly varying quadrature of the input, therefore estimating the phase of an unknown signal. There are other ways to surpass heterodyne detection, however they also acquire undesired photon number information. Therefore nature begs for a solution of implementing a CAN.
+
+\section{The setup}
+The system consists of a transmitter, which encodes a variable $\Theta_{\text{true}}$ into the phase of a single-photon electromagnetic signal, and a receiver, which uses a continuous feedback protocol to guess this phase in a single shot using adaptive feedback protocol (AFP). \textcolor{blue}{Note that in our case, the electromagnetic signal is automatically shifted without the need of including a receiver}.
+
+Here, the emitter is a transmon, embedded in a 3D aluminum cavity. One of the most important part is controlling the phase of the electromagnetic field. Here, coherent bath engineering is used to generate the photonic state. This yields more process control compared to direct spontaneous decay. \textcolor{red}{How to make this possible}? We Rabi drive the qubit that $\Omega/2\pi = 20$ MHz. This creates an effective low-frequency qubit. At the same time, we apply a cavity sideband at $\omega_{c}+\Omega_R$, where $\omega_c$ is the cavity resonance frequency. \textcolor{red}{What does this sideband do?}. It drives a transition from the $|+, 0\rangle$ state to $|-, 1\rangle$ state. The cavity then decays, emitting a photon and leaving the system in the $|-, 0\rangle$ state. This state is locked, because it is not affected by the sideband. We ensure that the cavity decay rate is fast compared to the sideband-induced coupling, so that the qubit's effective decay rate from $|+\rangle$ to $|-\rangle$ is limited by the sideband amplitude. \textcolor{red}{What does this mean?}. \textcolor{blue}{I'm not really sure}. 
+
+Regarding the receiver, it consists of a JPA and an FPGA (classical feedback controller). The JPA measures field amplitude via the quantum mechanical quadrature operator $\hat{a}e^{-i\phi(t)}+\hat{a}^\dagger e^{i\phi(t)}$. $\phi(t)$ is the instantaneous phase of the parametric pump. 
+
+\section{The process}
+To perform a CAN on the incident field, the feedback controller continuously adapts the measurement axis $\phi(t)$ as the photon arrives at the receiver. This is the most crucial element, as it allows learning about the phase of the EM field at quantum limit. Chronologically speaking, this is what happens. Before the photon reaches the JPA, the receiver has no information regarding the field and $\phi$ is chosen arbitrarily. Upon arrival of a small portion of the field, the JPA detects a small positive (or negative) fluctuation. This indicates the system that the true phase $\Theta_{\text{true}}$ is likely oriented along (or opposite) the measurement axis. At this point, we must alter the measurement axis. Ideally, we rotation the measurement axis by 90 degrees w.r.t the current best estimate of the phase $\theta(t)$. As the photon continues to arrive, the feedback controller gains more information and updates the phase $\phi(t)$ to maximize sensitivity to the phase. If the phase measurement condition $\phi(t) = \theta(t) + \pi/2$ is maintained at all times, then the system acquires no photon number information and implements a CAN. 
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{refs}
+\end{document}

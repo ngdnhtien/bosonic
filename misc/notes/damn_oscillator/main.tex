@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{xy}
+
+
+\usepackage{amsmath,amsthm,amssymb,color,latexsym}
+\usepackage{geometry}        
+\geometry{letterpaper}    
+\usepackage{graphicx}
+
+\newtheorem{question}{Question}
+
+\newenvironment{solution}[1][\it{Solution}]{\textbf{#1. } }{$\square$}
+
+
+\begin{document}
+\noindent Damn Oscillator\hfill Notes \#1\\
+\today
+
+\hrulefill
+
+
+\begin{question}
+Expansion of the Heisenberg-Langevin equation around $t = 2\pi/\Omega_0+\delta t$.
+\end{question}
+\begin{solution}
+The Heisenberg-Langevin equation reads
+\begin{align}
+    \langle\ddot{x}(t)\rangle + \Omega_0^2\langle x(t)\rangle + \int_0^t \dot{\kappa}(t-\tau)\langle x(\tau)\rangle d\tau = 0
+\end{align}
+Let $f(t)$ being the left hand side equation. Now we expand it around $2\pi/\Omega_0+\delta t$, where $\delta t$ being the small parameter.
+\begin{align}
+    f(2\pi/\Omega_0 + \delta t) = f(2\pi/\Omega_0) + f'(2\pi/\Omega_0)\delta t + O(\delta t^2)
+\end{align}
+Let us calculate the first term, 
+\begin{align}
+    \langle\ddot{x}(2\pi/\Omega_0 + \delta t)\rangle \approx \langle \ddot{x}(2\pi/\Omega_0)\rangle + \langle \dddot{x}(2\pi/\Omega_0)\rangle \delta t + O(\delta t^2)
+\end{align}
+Now the second term,
+\begin{align}
+    \langle {x}(2\pi/\Omega_0 + \delta t)\rangle \approx \langle {x}(2\pi/\Omega_0)\rangle + \langle \dot{x}(2\pi/\Omega_0)\rangle \delta t + O(\delta t^2)
+\end{align}
+The last term is quite subtle. We have two approaches. One being that we assume a $\kappa(t)$ function for damping effect, then guess a corresponding $\langle x(t)\rangle$ to integrate the last term exactly. Second being that we use the Leibniz formula.
+
+Here we explore the first one. We assume the damping to be Ohmic. In this sense,
+\begin{align}
+    \kappa(t) = \dfrac{2}{\pi}\dfrac{\gamma \omega_c}{1+\omega_c^2t^2}\Rightarrow \dot{\kappa}(t) = -\dfrac{4\gamma\omega_c^3}{\pi}\dfrac{t}{(1+\omega_c^2t^2)^2}
+\end{align}
+And let us assume a simple circular motion of the harmonic oscillator. In general, we should have a damping term.
+\begin{align}
+    \langle x(t)\rangle = e^{-\gamma t}e^{i\omega_0 t}
+\end{align}
+The integration is now,
+\begin{align}
+    \langle x(t)\rangle * \dot{\kappa}(t)= \int_0^t \langle x(\tau)\rangle \dot{\kappa}(t-\tau) d\tau =
+    -\dfrac{4\gamma\omega_c^3}{\pi}\int_0^t \dfrac{(t-\tau)e^{-\gamma \tau}e^{i\omega_0 \tau}}{(1+\omega_c^2(t-\tau)^2)^2} d\tau
+\end{align}
+\textbf{Approach 1a} (\textit{Laplace transform}). If we take the Laplace transform of $\langle x(t)\rangle * \dot{\kappa}(t)$, we get the product of Laplace transformed of them,
+\begin{align}
+    \mathcal{L}\left[\langle x(t)\rangle * \dot{\kappa}(t)\right] = \mathcal{L}\left[\langle x(t)\rangle\right]\mathcal{L}\left[\dot{\kappa}(t)\right]=F(s)G(s)\label{prodL}\\
+    \boxed{\Rightarrow \mathcal{L}^{-1}\left[F(s)G(s)\right] = \langle x(t)\rangle * \dot{\kappa}(t)}
+\end{align}
+The first Laplace transform is
+\begin{align}
+    F(s) = \mathcal{L}[\langle x(t)\rangle]=\dfrac{1}{\gamma + i\omega_0+s}
+\end{align}
+The second one is a bit more difficult.
+\begin{align}
+    G(s) = \mathcal{L}[\dot{\kappa}(t)]&= \omega \mathcal{L}[\kappa(t)]\\
+    &= \dfrac{2\gamma\omega_c s}{\pi}\int_0^\infty \dfrac{e^{-s t}}{1+\omega_c^2t^2}dt\label{G}
+\end{align}
+This integral is clearly convergent, but the value of it is dependent of $s$. If both $\omega_c$ and $s$ are large enough, let us try an approximation,
+\begin{align}
+    \dfrac{e^{-s t}}{1+\omega_c^2t^2} \approx 1-s t+t^2\left(\dfrac{s^2}{2}-\omega_c\right)+O(t^3)
+\end{align}
+Then (\ref{G}) looks something like
+\begin{align}
+    G(s) &\approx \dfrac{2\gamma\omega_c}{\pi}s\left(A's^2+Bs+C\right)\\
+    &=As^3+Bs^2+Cs
+\end{align}
+where $A, B, C$ are constants. Then, the product of two Laplace transforms (\ref{prodL}) look something like
+\begin{align}
+    F(s)G(s) = \dfrac{As^3+Bs^2+Cs}{\gamma + i\omega_0+s}=\dfrac{As^3+Bs^2+Cs}{z+s}
+\end{align}
+and this looks like a nightmare. Let us go back to using Fourier transform.\newline\\
+\noindent\textbf{Approach 1b} (Fourier transform). So again, if we take the Fourier transform of the convolution, we get the product of Fourier transform of them,
+\begin{align}
+    \mathcal{F}\left[\langle x(t)\rangle * \dot{\kappa}(t)\right]=G(\omega)H(\omega) \Rightarrow \langle x(t)\rangle *\dot{\kappa}(t)=\mathcal{F}^{-1}[G(\omega)H(\omega]
+\end{align}
+The Fourier transform of the first one is
+\begin{align}
+    G(\omega) = \mathcal{F}\left[\langle x(t)\rangle\right] = 2\pi \delta(\omega_0+i\gamma+\omega)
+\end{align}
+The Fourier transform of the second one is 
+\begin{align}
+    H(\omega) = \mathcal{F}\left[\dot{\kappa}(t)\right] = i\omega \mathcal{F}\left[\kappa(t)\right]
+\end{align}
+where 
+\begin{align}
+    \kappa(t) = \dfrac{2}{\pi m}\int_0^\infty \dfrac{J(\omega)}{\omega}\cos(\omega t)d\omega,\\
+    J(\omega) = m\gamma\omega e^{-\omega/\omega_c}.
+\end{align}
+
+\end{solution} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%Continue with this pattern if there are more%%%%%%%
+%%%%%%%%%%%%%%%%%homework problems%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+\end{document}

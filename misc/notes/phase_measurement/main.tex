@@ -1,0 +1,199 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{ bbold }
+\usepackage[margin=1in, a4paper]{geometry}
+\usepackage{amsmath} 
+\usepackage{amssymb}
+\usepackage{hyperref}
+\title{How do you measure the phase of an electromagnetic field?}
+\author{Tien Nguyen Dinh}
+\date{May 2024}
+\graphicspath{{images/}}
+\DeclareMathOperator{\lgcZ}{\bar{Z}}
+\DeclareMathOperator{\lgcX}{\bar{X}}
+\DeclareMathOperator{\lgczero}{|\bar{0}\rangle}
+\DeclareMathOperator{\lgcone}{|\bar{1}\rangle}
+\DeclareMathOperator{\lgcplus}{|\bar{+}\rangle}
+\DeclareMathOperator{\lgcminus}{|\bar{-}\rangle}
+\DeclareMathOperator{\lgcpm}{|\bar{\pm}\rangle}
+\DeclareMathOperator{\tr}{\text{tr}}
+\DeclareMathOperator{\diag}{\text{diag}}
+\DeclareMathOperator{\CR}{\text{CR}}
+\DeclareMathOperator{\psianc}{|\Psi_{\text{anc}}\rangle}
+\DeclareMathOperator{\psidata}{|\Psi_{\text{data}}\rangle}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Since the dawn of civilization, humans have always curious about the measurement of the phase of an electromagnetic field. In this note, I details how such a measurement can be performed. Moreover, I bridge the gap between theory, where measurement results are obtained using POVMs, and experiment, where the so-called dyne measurements are actually conducted using beamsplitters or IQ mixers. 
+
+This note is based on H. M. Wiseman and R. B. Killip, \textit{Adaptive single-shot phase measurements: The full quantum theory}. Phys. Rev. A \textbf{57}, 2169 (1998). \href{https://journals.aps.org/pra/abstract/10.1103/PhysRevA.57.2169}{10.1103/PhysRevA.57.2169}.
+
+\section{Why the problem?}
+Because since the dawn of civilization, humans have always curious about the measurement of the phase of an electromagnetic field.
+
+\section{The theory part}
+Defining a suitable observable for the phase in the infinite-dimensional Hilbert space of the harmonic oscillator has been an elusive task. Nevertheless, a POVM for the continous quantum phase $\phi$ can still be defined. It is assumed to have the form,
+\begin{align}
+    F(\phi) = (2\pi)^{-1} \sum_{m,n} e^{i\phi(m-n)}H_{mn}|m\rangle\langle n |,
+\end{align}
+where $H$ is a \textit{positive-semidefinite} Hermitian matrix. The phase is a continous variable, therefore in range $[0,2\pi)$. Because $F(\phi)$ is a POVM, it follows that the probability of obtaining a phase $\phi$ is $d\phi F(\phi)$. The completeness theorem says that,
+\begin{align}
+    \int_{0}^{2\pi} d\phi F(\phi) = \hat{I}.
+\end{align}
+Upon integrating this, we also find that $H_{mm}=1,\forall m \geq 0$. Now, different types of phase measurement is completely described by the the $H$ positive-semidefinite Hermitian matrix. 
+
+For a canonical phase measurement (CAN), $H_{mn}=1, \forall m, n$. 
+For a dyne measurement, namely homodyne measurement or heterodyne measurement, $0 \geq H_{mn}<1$. The CAN's POVM element for phase $\phi$ can be written as
+\begin{align}
+    F^{\text{CAN}}(\phi) = (2\pi)^{-1}|\phi\rangle\langle \phi|,
+\end{align}
+where $|\phi\rangle$ are the non-normalizable phase states, $|\phi\rangle=\sum_{n}e^{i\phi n}|n\rangle$. For heterodyne measurement, the POVM for a phase $\phi$ is however,
+\begin{align}
+    F^{\text{HET}}(\phi) = (2\pi)^{-1}\sum_{m,n}\dfrac{\Gamma[(m+n)/2+1]}{\sqrt{\Gamma(m+1)\Gamma(n+1)}}e^{i\phi(m-n)}|m\rangle\langle n|,
+\end{align}
+where $\Gamma$ is the gamma function, $\Gamma(m+1)=m!$ for all $m > 1$.  Now, since the POVM is well-defined, we have completely specify the measurement, from a theorist standpoint. 
+
+\section{The experiment part}
+The two following devices function equivalently: a 50/50 beamsplitter and an IQ mixer. Here, I first explain how a 50/50 beamsplitter works, and how we can use them to make estimation of the phase of a simple EM field. I then explain how an IQ mixer works, and also explain how we can use them to make estimation of the phase of a simple EM field. I conclude with comparison between the two and also make notes about how IQ mixers are actually used in circuit quantum electrodynamics architecture. 
+\subsection{Beamsplitters}
+Imagine you have an electric field. This field is denoted as $\hat{a}_1$. You want to make a measurement of the quadrature operators, or the "position" $\hat{X}$ and "momentum" $\hat{P}$ of the "harmonic oscillator",
+\begin{align}
+    \hat{X} = \frac{1}{2}(\hat{a}_1+\hat{a}_1^\dagger),\quad 
+    \hat{P} = \frac{1}{2i}(\hat{a}_1-\hat{a}_1^\dagger).
+\end{align}
+The way that you do this is to direct the field into a beamsplitter into port $1$, together with a large coherent field into port $2$ (for example, a laser). Let the field coming into port $2$ denoted as $\hat{a}_2$. The two output fields are denoted as $\hat{b}_{\pm}$. The relation between them and the input fields is specified by the beamsplitter, in this case assumed to be a balanced (50/50) beamsplitter,
+\begin{align}
+    \begin{pmatrix}
+        \hat{b}_{+} \\
+        \hat{b}_{-} 
+    \end{pmatrix} = \frac{1}{\sqrt{2}}
+    \begin{pmatrix}
+        1 & 1 \\
+        1 & -1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat{a}_{1} \\
+        \hat{a}_{2} 
+    \end{pmatrix}
+\end{align}
+Now, let us put two photocounters at the output ports $\pm$. The photocounts can be directly calculated by 
+\begin{align}
+    \hat{N}_{\pm} = \hat{b}_{\pm}^\dagger \hat{b}_{\pm}
+\end{align}
+Suppose that the field interacts with the detectors for $\tau$ seconds, then we can define a photocurrent $I(\tau)$ on each port such that
+\begin{align}\label{eqn7}
+    I_{\pm}(\tau) = \dfrac{\langle\hat{N}_{\pm}\rangle}{\tau}.
+\end{align}
+Now, we are going to substract the two photocurrents, that is, the signal of interest is the difference between them,
+\begin{align}
+    I_{\text{sig}} = I_{+}(\tau) - I_{-}(\tau) = \dfrac{1}{\tau}\left(\langle\hat{N}_{+}\rangle-\langle\hat{N}_{-}\rangle\right).
+\end{align}
+We are going to prove that this $I_{\sig}$ is in fact proportional to outcome of a measurement of either one of the two quadrature operators $\langle\hat{X}\rangle$ and $\langle\hat{P}\rangle$. We start by directly calculate the expectation value specified by Equation \ref{eqn7}. Here,
+\begin{align}
+    \langle\hat{N}_{\pm}\rangle = \dfrac{1}{2}\left(\langle\hat{a}_1^\dagger\hat{a}_1\rangle + |\alpha|e^{-i\Phi_{\alpha}}\langle \hat{a}_1\rangle + |\alpha|e^{i\Phi_{\alpha}}\langle \hat{a}_1^\dagger\rangle + |\alpha|^2\right),
+\end{align}
+where we have asummed that the coherent beam going into the second port is completely specified by a complex number (i.e. a coherent state) $|\alpha|e^{i\Phi_{\alpha}}$. Now, the signal of interest, which is the difference between the two photocurrents,
+\begin{align}
+    I_{\text{sig}} &= \dfrac{|\alpha|}{\tau}\left(\langle\hat{a}_1\rangle e^{-i\Phi_\alpha}+\langle\hat{a}_1^\dagger\rangle e^{i\Phi_\alpha}\right),\\
+    &=\dfrac{\alpha}{\tau}\langle \hat{X}(\Phi_\alpha+\pi/2)|\Psi\rangle,
+\end{align}
+where $|\Psi\rangle$ is the quantum state of the EM field at the input port 1. Upon choosing $\Phi_\alpha$ either being 0 or $\pi/2$, we can realize a $\hat{X}$ or $\hat{P}$ measurement. Now, we need both measurement of $\hat{X}$ and $\hat{P}$ to estimate the phase of the field, in this case let it be $\theta_{\text{true}}$. To measure both $\hat{X}$ and $\hat{P}$ in a single-shot measurement, we can use another beamsplitter to split the field into two parts with equal amplitude. Then, in each subsequent beamsplitter, the phase of the coherent field is $\pi/2$ to each other. Then in a single-shot, we estimate the phase to be
+\begin{align}
+    \theta_{\text{true}} = \tan^{-1}\left(\langle\hat{P}\rangle/\langle\hat{X}\rangle\right). 
+\end{align}
+\subsection{IQ mixers}
+Since I've described the beamsplitter, and I've also said that they are the same, it is up to your intention to reproduce the above results for IQ mixers. 
+
+Jk lol. Will do later.
+
+\section{Connecting the dots}
+Now, it should be noted that there's a gap between theory and experiment here. The gap is that, I know a set of POVM for the heterodyne measurement, and I know how to do it experimentally; but I do not know how these two are realted. This section devotes to bridge the gap. First, let us introducing the concept of the scaled time variable, $v$.
+\subsection{Scaled time variable}
+Let us assume that the single-mode signal field has a temporal pulse shape $u(t)$ that is normalized, $\int_0^\tau u(t)dt= 1$. Suppose that $u(t)=\gamma e^{-\gamma t}$. We define a scaled time variable, $v$ such that
+\begin{align}
+    v = \int_0^t u(t')dt'
+\end{align}
+For $t=0$ to $t=\infty$, $v$ goes from $v=0$ to $v=1$. This is for the sake of calculation.
+\subsection{Photocurrent and its POVM}
+In the very first section I said that we'd obtain a signal of interest $I_{\text{sig}}$. This signal is essentially a quantum mechanical observable. We now find a POVM describing the measurement of it. Suppose a 50/50 beamsplitter, we have 
+\begin{align}
+    \hat{b}_{\pm}(t) = \sqrt{\dfrac{u(t)}{2}}\left(\hat{a}_1\pm\hat{a}_2\right).
+\end{align}
+Here, $\hat{a}_1$ is the input field on port 1 and $\hat{a}_2$ is the input field on port 2. As before, the field that we'd like to characterize is $\hat{a}_1$. Let the field on port 2 be a coherent field $|\alpha|e^{i\Phi_\alpha}$. Now, assume the detuning between them is $\Delta=\omega_2-\omega_1$, then in Heisenberg picture,
+\begin{align}
+    \hat{b}_{\pm}(t) &= \sqrt{\dfrac{u(t)}{2}}\left(\hat{a}\pm|\alpha|e^{i(\Phi_\alpha+\Delta t)}\right)e^{-i\omega t},\\
+    &= \sqrt{\dfrac{u(t)}{2}}\left(\hat{a}\pm|\alpha|e^{i\Phi(t)}\right)e^{-i\omega t},
+\end{align}
+where $\omega$ is the optical frequency of the field. I've also dropped the index since there's no confusion about it at all. Again, denoting $\delta N_{\pm}(t)$ as the photocounts from $t\to t+\delta t$, then the instantaneous photocurrent signal (difference between the two ports) is
+\begin{align}
+    I(t) = \lim_{\delta t\to 0}\lim_{\beta\to\infty}\left(\dfrac{\delta N_+(t)-\delta N_{-}(t)}{\delta t}\right)\dfrac{1}{\beta}.
+\end{align}
+The second limit that we're taking here represents the fact that as $\beta$ grows, the signal become demonstrably weak since the difference is being dominated by the coherent field. When measuring this signal, you get two complex numbers by integrating them with respect to scaled time. The two complex numbers are 
+\begin{align}
+    A_v = \int_{0}^{v} I(v') e^{i\Phi(v')} dv',\\
+    B_v = -\int_{0}^{v} e^{2i\Phi(v')} dv'.
+\end{align}
+Now, I'm going to give you the following POVM, and you'll have to trust me about this. The POVM describing a measurement of $A$ and $B$ at time $0\leq v <1$ is given by
+\begin{align}
+    G_v(A_v, B_v) = G_v(A_v, B_v)e^{\frac{1}{2}B_v(\hat{a}^\dagger)^2+A_v\hat{a}^\dagger}(1-v)^{\hat{a}^\dagger\hat{a}/2}e^{\frac{1}{2}B^*_v\hat{a}^2+A^*_v \hat{a}},
+\end{align}
+where $Q_v(A_v, B_v)$ is a positive function that describes the joint probability distribution between $A_v$ and $B_v$. In the limit $v\to 1$, it can be shown that 
+\begin{align}
+    (1-v)^{\hat{a}^\dagger\hat{a}/2}\to |0\rangle\langle 0|.
+\end{align}
+Furthermore, it can be shown that 
+\begin{align}
+    e^{\frac{1}{2}B_v(\hat{a}^\dagger)^2+A_v\hat{a}^\dagger}|0\rangle &\propto e^{\alpha\hat{a}^\dagger-\alpha^*\hat{a}}e^{\frac{1}{2}\epsilon^*\hat{a}^2-\epsilon(\hat{a}^\dagger)^2}|0\rangle,\\
+    &=\hat{D}(\alpha)\hat{S}(\epsilon)|0\rangle,\\
+    &=|\alpha,\epsilon\rangle.
+\end{align}
+The two complex number $A, B$ is directly related to $\alpha,\epsilon$ through the set of identities,
+\begin{align}
+    \alpha = \dfrac{A+BA^*}{1-|B|^2},\\
+    \epsilon = \dfrac{-B\tan^{-1}|B|}{|B|}.
+\end{align}
+So, we can rewrite the POVM such that it is now corresponds to projecting the state onto a displaced squeezed state, 
+\begin{align}
+    G(\alpha, \epsilon) = Q(\alpha,\epsilon)|\alpha,\epsilon\rangle\langle \alpha,\epsilon|,
+\end{align}
+where $Q$ is now a new positive function, describing the joint probability distribution of $\alpha, \beta$. The sample space is now $\mathcal{C}\otimes\mathcal{C}$. Now, if we let the input state to be $|\Psi_M(k\phi)\rangle$, then the probability of measuring $\alpha,\epsilon$ is simply
+\begin{align}
+    P(\alpha,\epsilon) = \text{tr}\left[\rho_M(k\phi)G(\alpha,\epsilon)\right],
+    \propto |\langle\alpha,\epsilon | \Psi_M(k\phi)\rangle|^2,
+\end{align}
+which is essentially a projection of the state onto the displaced squeezed state.
+\subsection{Recovering heterodyne measurement}
+To recover the results for heterodyne measurement, we need just one thing. It is the statistics of $A$ and $B$. The joint probability distribution of them is found immediately later. Now, since it's a heterodyne measurement, $\Phi(t)=\Phi_\alpha+\Delta v$. The two complex numbers are thus
+\begin{align}
+    B = \int_{0}^{1} e^{2i(\Phi_\alpha+\Delta v)}dv = e^{-2i\Phi_\alpha}\dfrac{1-e^{2i\Delta}}{2i\Delta}.
+\end{align}
+As $\Delta$ is sufficiently large ($\Delta\to\infty$) the $B$ number becomes a constant and tends to zero. For $A$ is is much more complicated. What we need to find is
+\begin{align}
+    A = \int_{0}^{1} I(v)e^{i(\Phi_\alpha+\Delta v)}dv 
+\end{align}
+You'll have to again trust me on this. The ostensible distribution for $A$ is 
+\begin{align}
+    Q(A)d^2A = \pi^{-1}e^{-|A|^2} d^2A
+\end{align}
+Then, the POVM for the `$A$' number of a heterodyne measurement is thus
+\begin{align}
+    G(A) = \pi^{-1}e^{-|A|^2}|\tilde{\alpha,\epsilon}\rangle\langle\tilde{\alpha,\epsilon}|.
+\end{align}
+If we take $B$ to be zero, then $\epsilon$ is 0, meaning zero squeezing, and $\alpha$ is simply $A$. So, rewritting the POVM,
+\begin{align}
+    G(A) = \pi^{-1}e^{-|A|^2}|A\rangle\langle A|.
+\end{align}
+Again, $\theta_{\true}=\text{arg}(A)$ again. Once we have the $A$, then we can have the phase two. It is found by marginalizing the modulus of $A$,
+\begin{align}
+    F^{\text{HET}}(\phi) &= \int_0^\infty |A|d(|A|)G(A),\\
+    &=\dfrac{1}{2\pi}\sum_{m,n}e^{i\Phi(m-n)}H^{\text{HET}}_{mn}|m\rangle\langle n|,
+\end{align}
+which is the result from theory. We've successfully bridged the theory and experiment.
+% \bibliographystyle{plain} % We choose the "plain" reference style
+% \bibliography{refs}
+\end{document}

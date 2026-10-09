@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+report/*.aux
+report/*.bbl
+report/*.blg
+report/*.log
+report/*.out
+report/*.synctex.gz
+report/build.log
+report/bibtex.log
+literature/notes/*/*.aux
+literature/notes/*/*.bbl
+literature/notes/*/*.blg
+literature/notes/*/*.log
+literature/notes/*/*.out
