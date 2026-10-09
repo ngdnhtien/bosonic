@@ -1,6 +1,6 @@
-# spider-bqec
+# Bosonic quantum error correction: rotation-symmetric ``Spider'' state and logical gate between two bosonic qubits
 
-*A state that proves it is quantum, tried as a bosonic error-correcting code — and what the attempt taught us about building the gates.*
+This repo summarizes my work during 1 year spent at the Centre for Quantum Technologies. Results were obtained during 2023-2024. With frontier LLMs, those unorganized results are now organized, summarized and written up into a nice little report (see `main.pdf`). Of course there will be some "alien maths" along the way, but essentially the core physics was verified by a human (myself). Below this line, everything is LLM-generated.
 
 ## The story in five lines
 
