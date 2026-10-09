@@ -1,4 +1,3 @@
-
 This repo summarizes my work on bosonic quantum error correction: rotation-symmetric ``Spider'' state and logical gate between two bosonic qubits. The work was done at the Centre for Quantum Technologies. Results were obtained during 2023-2024. With frontier LLMs, those unorganized results are now organized, summarized and written up into a nice little report (see `main.pdf`). Of course there will be some "alien maths" along the way, but essentially the core physics was verified by a human (myself). Below this line, everything is LLM-generated.
 
 ## The story in five lines
